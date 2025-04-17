@@ -1,4 +1,4 @@
-package hillCipher;
+package oldCode.hillCipher;
 
 class Pair {
     char e1;

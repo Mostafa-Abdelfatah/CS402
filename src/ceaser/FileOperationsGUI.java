@@ -99,6 +99,7 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
             }
         } else if (source == encryptButton || source == decryptButton) {
             String filePath = filePathField.getText();
+            //key
             String numberStr = numberField.getText();
 
             // Validate file selection
@@ -107,15 +108,15 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
                 return;
             }
 
-            // Validate number input
+            // Validate number input of key
             int number;
             try {
                 number = Integer.parseInt(numberStr);
-                if (number < 1 || number > 25) {
+                if (number < 1 || number > 26) {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
-                messageLabel.setText("Please enter a valid number (1-25)");
+                messageLabel.setText("Please enter a valid number (1-26)");
                 return;
             }
 
@@ -125,13 +126,13 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
 
             switch (operation) {
                 case "Encrypt":
-                    result = Ceaser.encrypt(readFile(filePath), number);
+                    result = Ceaser.encrypt(readFile(filePath), number - 1);
                     if (result != null) {
                         writeFile(filePath, result); // Write encrypted content
                     }
                     break;
                 case "Decrypt":
-                    result = Ceaser.decrypt(readFile(filePath), number);
+                    result = Ceaser.decrypt(readFile(filePath), number - 1);
                     if (result != null) {
                         writeFile(filePath, result); // Write decrypted content
                     }

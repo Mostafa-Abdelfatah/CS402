@@ -1,5 +1,4 @@
-package playfair;
-import java.util.ArrayList;
+package oldCode.playfair;
 
 class Pair {
     char e1;

@@ -1,6 +1,4 @@
-package playfair;
-
-import ceaser.Ceaser;
+package oldCode.oneTimePad;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -8,13 +6,13 @@ import javax.swing.*;
 import java.io.*;
 
 public class FileOperationsGUI extends JFrame implements ActionListener {
+
     private JFileChooser fileChooser;
     private JTextField filePathField;
-    private JTextField keyField;
     private JLabel messageLabel, keyLabel;
     private JButton chooseFileButton, encryptButton, decryptButton;
-
-    private JPanel jPanelFile, jPanelKey, jPanel3Buttons, jPanelMessage;
+    private JPanel jPanelFile, jPanel3Buttons, jPanelMessage;
+    private final One o1 = new One();
 
     public FileOperationsGUI() {
         super("File Operations GUI");
@@ -32,16 +30,6 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
         filePathField = new JTextField(30);
         filePathField.setEditable(false);
         jPanelFile.add(filePathField);
-
-
-        jPanelKey = new JPanel();
-
-        //key label
-        keyLabel = new JLabel("enter key:");
-        jPanelKey.add(keyLabel);
-        // Number Field
-        keyField = new JTextField(10);
-        jPanelKey.add(keyField);
 
 
         jPanelMessage = new JPanel();
@@ -68,7 +56,6 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
 
 
         add(jPanelFile);
-        add(jPanelKey);
         add(jPanel3Buttons);
         add(jPanelMessage);
 
@@ -78,7 +65,6 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -94,7 +80,6 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
             }
         } else if (source == encryptButton || source == decryptButton) {
             String filePath = filePathField.getText();
-            String key = keyField.getText();
 
             // Validate file selection
             if (filePath.isEmpty()) {
@@ -102,39 +87,33 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
                 return;
             }
 
-            // Validate key input
-
-            if(key.isEmpty()) {
-                messageLabel.setText("please enter a valid key");
-                return;
-            } else {
-                for(int i = 0; i < key.length(); i++) {
-                    if(!Character.isAlphabetic(key.charAt(i))){
-                        messageLabel.setText("please enter a valid key");
-                        return;
-                    }
-                }
-            }
-
             // Perform the algorithm based on the button clicked
             String operation = ((JButton) source).getText();
             String result = null;
 
+
             switch (operation) {
                 case "Encrypt":
-                    Playfair p1 = new Playfair();
-                    p1.setUpMatrix(key);
-
-                    result = p1.encrypt(p1.setUpText(readFile(filePath)), p1.mat, p1.non);
+                    result = o1.encrypt(readFile(filePath));
                     if (result != null) {
                         writeFile(filePath, result); // Write encrypted content
                     }
                     break;
                 case "Decrypt":
-                    Playfair p2 = new Playfair();
-                    p2.setUpMatrix(key);
-
-                    result = p2.decrypt(p2.setUpText(readFile(filePath)), p2.mat, p2.non);
+                    String s = readFile(filePath);
+                    assert s != null;
+                    String a = "";
+                    // to remove '\0' char
+                    for(int i = 0; i < s.length(); i++) {
+                        if(Character.isAlphabetic(s.charAt(i))) {
+                            a += s.charAt(i);
+                        }
+                    }
+                    if(a.length() != o1.getSize()){
+                        messageLabel.setText("the text has a length not equal the key");
+                        return;
+                    }
+                    result = o1.decrypt(a);
                     if (result != null) {
                         writeFile(filePath, result); // Write decrypted content
                     }
@@ -149,7 +128,6 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
                 messageLabel.setText("Error in performing " + operation);
             }
         }
-
     }
 
     private String readFile(String filePath) {
@@ -178,7 +156,6 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
         }
     }
 
-    // Main method (unchanged)
     public static void main(String[] args) {
         new FileOperationsGUI();
     }

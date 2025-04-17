@@ -1,6 +1,4 @@
-package DES;
-
-import java.util.Arrays;
+package oldCode.DES;
 
 /**
  * the length of the key must 16
@@ -22,6 +20,11 @@ public class Key {
     private String[] realKeys = new String[16];
 
     public Key(String s) {
+        StringBuilder hexString = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            hexString.append(String.format("%02X", (int) s.charAt(i)));
+        }
+        s = hexString.toString();
         this.key = String.format("%64s", new java.math.BigInteger(s, 16).toString(2)).replace(' ', '0');
         System.out.println(key);
         // make 56 bit subKey
@@ -37,7 +40,7 @@ public class Key {
         String[] Ds = new String[17];
 
         Cs[0] = C0;
-        Ds[0] = D0;;
+        Ds[0] = D0;
 
 
         for(int i = 1; i < 17; i++) {
@@ -72,12 +75,14 @@ public class Key {
 
 
     public static void main(String[] args) {
-//        Key k = new Key("0123456789ABCDEF");
-//        String[] keys = k.getRealKeys();
-//        for (int i = 0; i < 16; i++) {
-//            System.out.println(keys[i].length());
-//            System.out.println(keys[i]);
-//        }
+        Key k = new Key("HELLO");
+        String[] keys = k.getRealKeys();
+        for (int i = 0; i < 16; i++) {
+            System.out.println(keys[i].length());
+            System.out.println(keys[i]);
+        }
+        DES d = new DES();
+        System.out.println(d.encrypt("4D4F5354414641", keys));
 //        String[] t = new String[6];
 //        t[0] = "000010110000001001100111100110110100100110100101";
 //        t[1] = "011010011010011001011001001001010110101000100110";
@@ -95,3 +100,5 @@ public class Key {
 
 
 }
+//701F5E9D5901E6C9
+//701F5E9D5901E6C9

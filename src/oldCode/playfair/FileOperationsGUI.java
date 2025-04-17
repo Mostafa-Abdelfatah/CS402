@@ -1,4 +1,4 @@
-package DES;
+package oldCode.playfair;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -106,36 +106,33 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
                 messageLabel.setText("please enter a valid key");
                 return;
             } else {
-                if(key.length() != 16) {
-                    messageLabel.setText("please enter a valid key");
-                    return;
+                for(int i = 0; i < key.length(); i++) {
+                    if(!Character.isAlphabetic(key.charAt(i))){
+                        messageLabel.setText("please enter a valid key");
+                        return;
+                    }
                 }
             }
-            String tempKey = "";
-            for(int i = 0; i < 16; i++) {
-                tempKey += key.charAt(i);
-            }
-            tempKey =  tempKey.toUpperCase();
-            Key k = new Key(tempKey);
 
             // Perform the algorithm based on the button clicked
             String operation = ((JButton) source).getText();
             String result = null;
-            DES d = new DES();
 
             switch (operation) {
                 case "Encrypt":
-                    String s = readFile(filePath);
-                    s = s.toUpperCase();
-                    result = d.encrypt(s.substring(0,s.length()-1), k.getRealKeys());
+                    Playfair p1 = new Playfair();
+                    p1.setUpMatrix(key);
+
+                    result = p1.encrypt(p1.setUpText(readFile(filePath)), p1.mat, p1.non);
                     if (result != null) {
                         writeFile(filePath, result); // Write encrypted content
                     }
                     break;
                 case "Decrypt":
-                    String f = readFile(filePath);
-                    f = f.toUpperCase();
-                    result = d.decrypt(f.substring(0, f.length() - 1), k.getRealKeys());
+                    Playfair p2 = new Playfair();
+                    p2.setUpMatrix(key);
+
+                    result = p2.decrypt(p2.setUpText(readFile(filePath)), p2.mat, p2.non);
                     if (result != null) {
                         writeFile(filePath, result); // Write decrypted content
                     }
@@ -184,4 +181,3 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
         new FileOperationsGUI();
     }
 }
-

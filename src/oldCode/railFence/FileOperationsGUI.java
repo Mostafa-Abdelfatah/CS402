@@ -1,6 +1,4 @@
-package vigenere;
-
-import ceaser.Ceaser;
+package oldCode.railFence;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -104,16 +102,23 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
 
             // Validate key input
 
+
+            int d = -1;
             if(key.isEmpty()) {
                 messageLabel.setText("please enter a valid key");
                 return;
-            } else {
-                for(int i = 0; i < key.length(); i++) {
-                    if(!Character.isAlphabetic(key.charAt(i))){
+            } else if(!key.isEmpty()) {
+                for(int i = 0; i < key.length(); i++){
+                    if(key.charAt(i) < '0' && key.charAt(i) > '9') {
                         messageLabel.setText("please enter a valid key");
                         return;
                     }
                 }
+                d = Integer.parseInt(key);
+            }
+            if(d < 2) {
+                messageLabel.setText("please enter a valid key >= 2");
+                return;
             }
 
             // Perform the algorithm based on the button clicked
@@ -122,13 +127,13 @@ public class FileOperationsGUI extends JFrame implements ActionListener {
 
             switch (operation) {
                 case "Encrypt":
-                    result = Vigi.encrypt(readFile(filePath), key);
+                    result = Rail.encrypt(readFile(filePath), d);
                     if (result != null) {
                         writeFile(filePath, result); // Write encrypted content
                     }
                     break;
                 case "Decrypt":
-                    result = Vigi.decrypt(readFile(filePath), key);
+                    result = Rail.decrypt(readFile(filePath), d);
                     if (result != null) {
                         writeFile(filePath, result); // Write decrypted content
                     }

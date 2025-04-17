@@ -1,4 +1,4 @@
-package oneTimePad;
+package oldCode.oneTimePad;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package railFence;
+package oldCode.railFence;
 
 public class Rail {
 

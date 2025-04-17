@@ -54,8 +54,9 @@ public class Ceaser {
 
     public static String attack(String s) {
         String v = "";
-        for(int i = 0; i < 25; i++) {
-            v += decrypt(s, i + 1);
+        for(int i = 0; i < 26; i++) {
+            v += "attack at key = " + i + " ";
+            v += decrypt(s, i);
             v += '\n';
         }
         return v;

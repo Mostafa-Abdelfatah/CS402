@@ -1,4 +1,4 @@
-package vigenere;
+package oldCode.vigenere;
 
 class Pair {
     char e1;
